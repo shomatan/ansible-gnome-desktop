@@ -1,0 +1,12 @@
+---
+- name: Ensure GNOME Desktop group is installed.
+  yum: name="@^gnome-desktop-environment" state=present
+
+- name: Check default target.
+  command: systemctl get-default
+  register: result
+  changed_when: False
+
+- name: Ensure default target is graphical.
+  command: systemctl set-default graphical.target
+  when: '"graphical.target" not in result.stdout'
